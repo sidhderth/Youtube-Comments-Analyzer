@@ -1,24 +1,19 @@
 {
     "manifest_version": 3,
-    "name": "YouTube Comment Sentiment Analyzer",
+    "name": "YouTube Comment Analyzer",
     "version": "1.0",
-    "description": "An extension to analyze the sentiment of YouTube comments.",
-    "permissions": [
-        "activeTab",
-        "scripting"
-    ],
+    "description": "Fetches comments from YouTube videos and analyzes sentiment.",
+    "permissions": ["activeTab"],
+    "host_permissions": ["https://www.youtube.com/*"],
     "action": {
-        "default_popup": "popup.html",
-        "default_icon": {
-            "16": "icon/icon16.png",
-            "48": "icon/icon48.png",
-            "128": "icon/icon128.png"
-        }
+      "default_popup": "popup.html"
     },
+    
     "content_scripts": [
-        {
-            "matches": ["*://www.youtube.com/*"],
-            "js": ["content.js"]
-        }
+      {
+        "matches": ["https://www.youtube.com/*"],
+        "js": ["content.js"],
+        "run_at": "document_end"
+      }
     ]
-}
+  }
