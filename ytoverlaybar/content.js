@@ -2,12 +2,17 @@
     'use strict';
 
     const exampleValue = {
-        positive: 70, // Positive percentage
-        negative: 30  // Negative percentage
+        positive: 70, // hardcoded for testing
+        negative: 30
     };
 
     function insertBar() {
         if (document.getElementById('yt-overlay-bar')) return;
+
+        if (!window.location.href.includes('/watch?v=')) {
+            removeBar();
+            return;
+        }
 
         const Container = document.createElement('div');
         Container.id = 'yt-overlay-bar';
@@ -76,6 +81,13 @@
         document.addEventListener('fullscreenchange', toggleBarVisibility);
     }
 
+    function removeBar() {
+        const bar = document.getElementById('yt-overlay-bar');
+        if (bar) {
+            bar.remove();
+        }
+    }
+
     function toggleBarVisibility() {
         const bar = document.getElementById('yt-overlay-bar');
         if (!bar) return;
@@ -86,6 +98,16 @@
             bar.style.display = 'flex';
         }
     }
+
+    let lastUrl = location.href;
+    new MutationObserver(() => {
+        const currentUrl = location.href;
+        if (currentUrl !== lastUrl) {
+            lastUrl = currentUrl;
+            removeBar();
+            insertBar();
+        }
+    }).observe(document, { subtree: true, childList: true });
 
     insertBar();
 })();
