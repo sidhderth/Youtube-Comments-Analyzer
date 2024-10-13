@@ -12,7 +12,7 @@
         const Container = document.createElement('div');
         Container.id = 'yt-overlay-bar';
         Container.style.position = 'fixed';
-        Container.style.top = '4.2vh';
+        Container.style.top = '5%';
         Container.style.height = '1vh';
         Container.style.right = '12vw';
         Container.style.width = '10vw';
