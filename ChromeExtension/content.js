@@ -1,5 +1,3 @@
-console.log("Content script loaded");
-
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.action === "scrape") {
         // Get the video ID from the current URL
@@ -15,12 +13,10 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         })
         .then(response => response.json())
         .then(data => {
-            console.log("Video ID sent to server:", videoId);
-            sendResponse({ success: true });
+            sendResponse({ success: true }); // Send success response without logging
         })
         .catch(error => {
-            console.error("Error sending video ID to server:", error);
-            sendResponse({ success: false });
+            sendResponse({ success: false }); // Send failure response without logging
         });
 
         return true; // Keep the message channel open for sendResponse
