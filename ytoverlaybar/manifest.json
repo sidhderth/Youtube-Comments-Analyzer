@@ -1,0 +1,17 @@
+{
+  "manifest_version": 3,
+  "name": "YouTube Overlay Bar",
+  "version": "1.1",
+  "description": "Displays a colored bar from 0 to 4 on top of YouTube videos with dynamic updates.",
+  "permissions": [],
+  "host_permissions": [
+    "https://www.youtube.com/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["https://www.youtube.com/*"],
+      "js": ["contentbar.js"],
+      "run_at": "document_end"
+    }
+  ]
+}
