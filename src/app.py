@@ -43,7 +43,7 @@ def get_comments(client, video_id, token=None):
 def analyze_comments():
     global video_id
     yt_client = build(
-        "youtube", "v3", developerKey="YOUR_API_KEY"  # Replace with your actual API key
+        "youtube", "v3", developerKey="AIzaSyA7qgWTG3KYFoLrVZXdi6oAwb4_70kuFCU"  # Replace with your actual API key
     )
 
     while True:
