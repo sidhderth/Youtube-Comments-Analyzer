@@ -13,7 +13,6 @@ def get_video_id():
     global video_id
     data = request.get_json()
     video_id = data.get('videoId')
-    print(f"Received Video ID: {video_id}")
     return {'status': 'success'}, 200
 
 def run_flask_app():
@@ -33,11 +32,9 @@ def get_comments(client, video_id, token=None):
             .execute()
         )
         return response
-    except HttpError as e:
-        print(e.resp.status)
+    except HttpError:
         return None
-    except Exception as e:
-        print(e)
+    except Exception:
         return None
 
 def analyze_comments():
@@ -86,13 +83,12 @@ def analyze_comments():
                 "negative_ratio": negative_ratio
             }
 
-            # You can use sentiment_ratios variable later as needed
-            # For now, it is just stored and not printed
+            # Use sentiment_ratios variable later as needed
+            # The ratios are stored but not printed or logged
 
             video_id = None  # Reset video ID to prevent repeated processing
 
 if __name__ == '__main__':
     # Start the Flask app in a separate thread
     threading.Thread(target=run_flask_app).start()
-    print("Flask server running on http://localhost:5000")
     analyze_comments()  # Start analyzing comments
