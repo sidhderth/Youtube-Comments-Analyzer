@@ -1,15 +1,18 @@
 (function() {
     'use strict';
 
+    // Hardcoded value (0 or 4)
+    const hardcodedValue = 4; // Change this to 0 or 4 as needed
+
     function insertBar() {
         if (document.getElementById('yt-overlay-bar')) return;
 
         const Container = document.createElement('div');
         Container.id = 'yt-overlay-bar';
         Container.style.position = 'fixed';
-        Container.style.top = '2vh';
+        Container.style.top = '8.2vh';
         Container.style.height = '1vh';
-        Container.style.right = '15vw';
+        Container.style.right = '12vw';
         Container.style.width = '10vw';
         Container.style.zIndex = '9999';
         Container.style.pointerEvents = 'none';
@@ -19,7 +22,7 @@
         Container.style.display = 'flex';
         Container.style.alignItems = 'center';
         Container.style.justifyContent = 'space-between';
-        Container.style.padding = '2vh';
+        Container.style.padding = '1.6vh';
 
         const leftLabel = document.createElement('span');
         leftLabel.textContent = '0';
@@ -33,7 +36,7 @@
         bar.style.width = '100%';
         bar.style.height = '100%';
         bar.style.borderRadius = '2vh';
-        bar.style.background = getBarColor(2);
+        bar.style.background = getBarColor(hardcodedValue); // Use the hardcoded value
 
         Container.appendChild(leftLabel);
         Container.appendChild(bar);
@@ -51,10 +54,8 @@
     }
 
     function getBarColor(value) {
-        const normalized = value / 4;
-        const r = normalized < 0.5 ? 255 : Math.round(255 - (normalized - 0.5) * 2 * 255);
-        const g = normalized > 0.5 ? 255 : Math.round(normalized * 2 * 255);
-        return `rgb(${r}, ${g}, 0)`;
+        // Return red for 0 and green for 4
+        return value === 0 ? 'rgb(255, 0, 0)' : 'rgb(0, 255, 0)'; // Red for 0, Green for 4
     }
 
     function toggleBarVisibility() {
