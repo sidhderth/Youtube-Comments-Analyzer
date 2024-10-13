@@ -1,18 +1,16 @@
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
-import csv
+from transformers import pipeline
 import sys
 
-if len(sys.argv) != 3:
-    print("Add a video ID and output file name after the script name")
+if len(sys.argv) != 2:
+    print("Add a video ID after the script name")
     sys.exit(1)
 
-vid_id = sys.argv[1]   
-output_file = sys.argv[2]
+vid_id = sys.argv[1]
 yt_client = build(
-    "youtube", "v3", developerKey="AIzaSyA7qgWTG3KYFoLrVZXdi6oAwb4_70kuFCU"  
+    "youtube", "v3", developerKey="AIzaSyA7qgWTG3KYFoLrVZXdi6oAwb4_70kuFCU"
 )
-
 
 def get_comments(client, video_id, token=None):
     try:
@@ -35,26 +33,36 @@ def get_comments(client, video_id, token=None):
         print(e)
         return None
 
-
+# Initialize an empty list to store comments
 comments = []
-next = None
+next_token = None
 
 while True:
-    resp = get_comments(yt_client, vid_id, next)
+    resp = get_comments(yt_client, vid_id, next_token)
 
     if not resp:
         break
 
-    comments += resp["items"]
-    next = resp.get("nextPageToken")
-    if not next:
+    # Extract comment texts into a flat list
+    comments.extend(item["snippet"]["topLevelComment"]["snippet"]["textDisplay"] for item in resp["items"])
+    next_token = resp.get("nextPageToken")
+    if not next_token:
         break
 
-print(f"Total comments fetched:{len(comments)}")
+# Store the comments as a one-dimensional list
+comment_texts = comments
 
+print(f"Total comments fetched: {len(comment_texts)}")
 
-with open(output_file, "w", newline="", encoding="utf-8") as file:
-    csvWrite = csv.writer(file)
-    for i in comments:
-        row = [i["snippet"]["topLevelComment"]["snippet"]["textDisplay"]]
-        csvWrite.writerow(row)
+# Sentiment Analysis
+classifier = pipeline("sentiment-analysis")
+
+# Perform sentiment analysis on the list of comments
+result = classifier(comment_texts)
+
+# Extract sentiment labels
+labels = [item['label'] for item in result]
+
+# Print the sentiment values
+for comment, label in zip(comment_texts, labels):
+    print(f"Comment: {comment}\nSentiment: {label}\n")
